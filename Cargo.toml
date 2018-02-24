@@ -1,0 +1,12 @@
+[package]
+name = "espagnol"
+version = "0.0.1"
+authors = ["Nil Goyette <nil.goyette@gmaik.com>"]
+
+description = "TrackVis (*.trk) reader and writer"
+repository = "https://github.com/imeka/trk-io"
+readme = "README.md"
+
+[dependencies]
+select = "0.4"
+reqwest = "0.8"
