@@ -51,13 +51,8 @@ fn get_verb(verb: &str, language: &str, tense: &str, pronoun_length: usize) -> T
                 tense.set(Conjugation::from_string(pronoun.trim_right()), &verb);
             }
 
-            // Serialize it before returning
-            let mut path = get_app_root(AppDataType::SharedData, &APP_INFO).unwrap();
-            path.push(language);
-            path.push(verb.to_string() + ".json");
-
-            println!("Writing {} to {:?}.", verb, path);
-            let mut file = File::create(path).unwrap();
+            // Serialize it before returning. Lets disturb the verb source as less as possible
+            let mut file = File::create(get_json_path(language, verb)).unwrap();
             file.write_all(&serde_json::to_string(&tense).unwrap().into_bytes()).unwrap();
 
             return tense;
@@ -68,16 +63,9 @@ fn get_verb(verb: &str, language: &str, tense: &str, pronoun_length: usize) -> T
 }
 
 fn already_downloaded(verb: &str, language: &str) -> Option<Tense> {
-    let mut folder = get_app_root(AppDataType::SharedData, &APP_INFO).unwrap();
-    folder.push(language);
-    if !Path::new(&folder).exists() {
-        fs::create_dir_all(&folder).unwrap();
-    }
-
-    folder.push(verb.to_string() + ".json");
-    println!("{:?}", folder);
-    if Path::new(&folder).exists() {
-        let mut f = File::open(folder).expect("file not found");
+    let json_path = get_json_path(language, verb);
+    if Path::new(&json_path).exists() {
+        let mut f = File::open(json_path).expect("file not found");
         let mut serialized = String::new();
         f.read_to_string(&mut serialized)
             .expect("something went wrong reading the file");
@@ -85,4 +73,16 @@ fn already_downloaded(verb: &str, language: &str) -> Option<Tense> {
     } else {
         None
     }
+}
+
+fn get_json_path(language: &str, verb: &str) -> String {
+    let mut path = get_app_root(AppDataType::SharedData, &APP_INFO).unwrap();
+    path.push(language);
+    if !path.exists() {
+        fs::create_dir_all(&path).unwrap();
+    }
+
+    path.push(verb.to_string());
+    path.set_extension("json");
+    path.to_str().unwrap().to_string()
 }
