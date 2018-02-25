@@ -11,6 +11,17 @@ pub enum Conjugation {
 }
 
 impl Conjugation {
+    pub fn all() -> Vec<Conjugation> {
+        vec![
+            Conjugation::Root,
+            Conjugation::FirstSingular,
+            Conjugation::SecondSingular,
+            Conjugation::ThirdSingular,
+            Conjugation::FirstPlural,
+            Conjugation::SecondPlural,
+            Conjugation::ThirdPlural]
+    }
+
     // TODO Prendre en charge les verbes impersonels. ex. pleuvoir, falloir, etc.
     pub fn from_string(det: &str) -> Conjugation {
         match det {

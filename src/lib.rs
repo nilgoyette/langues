@@ -1,4 +1,5 @@
 extern crate app_dirs;
+extern crate rand;
 extern crate reqwest;
 extern crate select;
 extern crate serde;
@@ -7,15 +8,17 @@ extern crate serde_json;
 
 mod conjugation;
 mod fetcher;
+mod question;
 mod tense;
 
 use conjugation::Conjugation;
+pub use fetcher::{get_french_verb, get_spanish_verb};
+pub use question::Questions;
 use tense::Tense;
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use fetcher::{get_french_verb, get_spanish_verb};
 
     #[test]
     fn test_access_and_conjugation() {

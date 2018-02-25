@@ -25,6 +25,18 @@ impl Tense {
         }
     }
 
+    pub fn get(&self, conjugation: Conjugation) -> &str {
+        match conjugation {
+            Conjugation::Root => &self.root,
+            Conjugation::FirstSingular => &self.first_singular,
+            Conjugation::SecondSingular => &self.second_singular,
+            Conjugation::ThirdSingular => &self.third_singular,
+            Conjugation::FirstPlural => &self.first_plural,
+            Conjugation::SecondPlural => &self.second_plural,
+            Conjugation::ThirdPlural => &self.third_plural
+        }
+    }
+
     pub fn set(&mut self, conjugation: Conjugation, verb: &str) {
         match conjugation {
             Conjugation::Root => self.root = verb.to_string(),
