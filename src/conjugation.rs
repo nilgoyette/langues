@@ -1,7 +1,13 @@
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 pub enum Conjugation {
-    Root, Je, Tu, Il, Nous, Vous, Ils
+    Root,
+    FirstSingular,
+    SecondSingular,
+    ThirdSingular,
+    FirstPlural,
+    SecondPlural,
+    ThirdPlural
 }
 
 impl Conjugation {
@@ -9,12 +15,12 @@ impl Conjugation {
     pub fn from_string(det: &str) -> Conjugation {
         match det {
             "" => Conjugation::Root,
-            "je" | "(yo)" => Conjugation::Je,
-            "tu" | "(tú)" => Conjugation::Tu,
-            "il/elle" | "(él/ella/Ud.)" => Conjugation::Il,
-            "nous" | "(nosotros)" => Conjugation::Nous,
-            "vous" | "(vosotros)" => Conjugation::Vous,
-            "ils/elles" | "(ellos/ellas/Uds.)" => Conjugation::Ils,
+            "je" | "(yo)" => Conjugation::FirstSingular,
+            "tu" | "(tú)" => Conjugation::SecondSingular,
+            "il/elle" | "(él/ella/Ud.)" => Conjugation::ThirdSingular,
+            "nous" | "(nosotros)" => Conjugation::FirstPlural,
+            "vous" | "(vosotros)" => Conjugation::SecondPlural,
+            "ils/elles" | "(ellos/ellas/Uds.)" => Conjugation::ThirdPlural,
             _ => panic!("{} n'est pas un pronom personel du français ou de l'espagnol.", det)
         }
     }

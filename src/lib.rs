@@ -1,12 +1,16 @@
-extern crate select;
+extern crate app_dirs;
 extern crate reqwest;
+extern crate select;
+extern crate serde;
+#[macro_use] extern crate serde_derive;
+extern crate serde_json;
 
 mod conjugation;
 mod fetcher;
+mod tense;
 
 use conjugation::Conjugation;
-
-type Tense = Vec<(Conjugation, String)>;
+use tense::Tense;
 
 #[cfg(test)]
 mod tests {
@@ -16,21 +20,21 @@ mod tests {
     #[test]
     fn test_access_and_conjugation() {
         let v = get_french_verb("manger");
-        assert_eq!(v[0], (Conjugation::Root, "manger".to_string()));
-        assert_eq!(v[1], (Conjugation::Je, "mange".to_string()));
-        assert_eq!(v[2], (Conjugation::Tu, "manges".to_string()));
-        assert_eq!(v[3], (Conjugation::Il, "mange".to_string()));
-        assert_eq!(v[4], (Conjugation::Nous, "mangeons".to_string()));
-        assert_eq!(v[5], (Conjugation::Vous, "mangez".to_string()));
-        assert_eq!(v[6], (Conjugation::Ils, "mangent".to_string()));
+        assert_eq!(v.root, "manger".to_string());
+        assert_eq!(v.first_singular, "mange".to_string());
+        assert_eq!(v.second_singular, "manges".to_string());
+        assert_eq!(v.third_singular, "mange".to_string());
+        assert_eq!(v.first_plural, "mangeons".to_string());
+        assert_eq!(v.second_plural, "mangez".to_string());
+        assert_eq!(v.third_plural, "mangent".to_string());
 
         let v = get_spanish_verb("comer");
-        assert_eq!(v[0], (Conjugation::Root, "comer".to_string()));
-        assert_eq!(v[1], (Conjugation::Je, "como".to_string()));
-        assert_eq!(v[2], (Conjugation::Tu, "comes".to_string()));
-        assert_eq!(v[3], (Conjugation::Il, "come".to_string()));
-        assert_eq!(v[4], (Conjugation::Nous, "comemos".to_string()));
-        assert_eq!(v[5], (Conjugation::Vous, "coméis".to_string()));
-        assert_eq!(v[6], (Conjugation::Ils, "comen".to_string()));
+        assert_eq!(v.root, "comer".to_string());
+        assert_eq!(v.first_singular, "como".to_string());
+        assert_eq!(v.second_singular, "comes".to_string());
+        assert_eq!(v.third_singular, "come".to_string());
+        assert_eq!(v.first_plural, "comemos".to_string());
+        assert_eq!(v.second_plural, "coméis".to_string());
+        assert_eq!(v.third_plural, "comen".to_string());
     }
 }
