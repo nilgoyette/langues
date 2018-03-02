@@ -1,8 +1,9 @@
 
-use Conjugation;
+use {Conjugation, Language};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Tense {
+    pub language: Language,
     pub root: String,
     pub first_singular: String,
     pub second_singular: String,
@@ -13,8 +14,9 @@ pub struct Tense {
 }
 
 impl Tense {
-    pub fn new() -> Tense {
+    pub fn new(language: Language) -> Tense {
         Tense {
+            language,
             root: String::new(),
             first_singular: String::new(),
             second_singular: String::new(),
@@ -23,6 +25,10 @@ impl Tense {
             second_plural: String::new(),
             third_plural: String::new()
         }
+    }
+
+    pub fn get_pronoun(&self, conjugation: Conjugation) -> &str {
+        self.language.get_pronoun(conjugation)
     }
 
     pub fn get(&self, conjugation: Conjugation) -> &str {

@@ -10,39 +10,34 @@ use select::document::Document;
 use select::predicate::{Class, Name, Predicate};
 use serde_json;
 
-use {Conjugation, Tense};
+use {Conjugation, Language, Tense};
 
 const APP_INFO: AppInfo = AppInfo{name: "Langues", author: "nilgoyette"};
 
-pub fn get_french_verb(verb: &str) -> Tense {
-    get_verb(verb, "francais", "Présent", 1)
-}
-
-pub fn get_spanish_verb(verb: &str) -> Tense {
-    get_verb(verb, "espagnol", "Presente", 3)
-}
-
 // http://conjugueur.reverso.net/conjugaison-francais-verbe-dormir.html
 // http://conjugueur.reverso.net/conjugaison-espagnol-verbe-dormir.html
-fn get_verb(verb: &str, language: &str, tense: &str, pronoun_length: usize) -> Tense {
-    if let Some(tense) = already_downloaded(verb, language) {
+pub fn get_verb(verb: &str, language: Language) -> Tense {
+    let language_name = language.name();
+    if let Some(tense) = already_downloaded(verb, language_name) {
         return tense;
     }
 
     let url = format!(
-        "http://conjugueur.reverso.net/conjugaison-{}-verbe-{}.html", language, verb);
+        "http://conjugueur.reverso.net/conjugaison-{}-verbe-{}.html", language_name, verb);
     let resp = reqwest::get(&url).unwrap();
     assert!(resp.status().is_success());
 
     let path_to_tense = Name("p");
     let path_to_text = Class("wrap-verbs-listing").descendant(Name("li")).descendant(Name("i"));
+    let tense_name = language.present_tense();
+    let pronoun_length = language.pronoun_length();
 
     let document = Document::from_read(resp).unwrap();
     for node in document.find(Class("blue-box-wrap")) {
-        if node.find(path_to_tense).next().unwrap().text().trim_right() == tense {
+        if node.find(path_to_tense).next().unwrap().text().trim_right() == tense_name {
             let words: Vec<String> = node.find(path_to_text).map(|n| n.text()).collect();
 
-            let mut tense = Tense::new();
+            let mut tense = Tense::new(language);
             tense.set(Conjugation::Root, verb);
 
             for chunk in words.chunks(pronoun_length + 1) {
@@ -52,14 +47,14 @@ fn get_verb(verb: &str, language: &str, tense: &str, pronoun_length: usize) -> T
             }
 
             // Serialize it before returning. Lets disturb the verb source as less as possible
-            let mut file = File::create(get_json_path(language, verb)).unwrap();
+            let mut file = File::create(get_json_path(language_name, verb)).unwrap();
             file.write_all(&serde_json::to_string(&tense).unwrap().into_bytes()).unwrap();
 
             return tense;
         }
     }
 
-    panic!("Le temps de verbe {} n'a pas été trouvé dans la page {}.", tense, url);
+    panic!("Le temps de verbe {} n'a pas été trouvé dans la page {}.", tense_name, url);
 }
 
 fn already_downloaded(verb: &str, language: &str) -> Option<Tense> {

@@ -38,18 +38,21 @@ impl Questions {
             let &(ref french, ref spanish) = &self.verbs[idx];
 
             // Choose side
-            let (question, answer) = if rng.gen() {
-                (french.get(conjugation), spanish.get(conjugation))
+            let (from, to) = if rng.gen() {
+                (french, spanish)
             } else {
-                (spanish.get(conjugation), french.get(conjugation))
+                (spanish, french)
             };
-            println!("{}", question);
+            let pronoun = from.get_pronoun(conjugation);
+            let question = from.get(conjugation);
+            println!("{} {}", pronoun, question);
 
             user_answer.clear();
             stdout().flush().unwrap();
             stdin().read_line(&mut user_answer).expect("Did not enter a correct string");
             user_answer = user_answer.trim().to_string();
 
+            let answer = to.get(conjugation);
             if user_answer != answer {
                 println!("Wrong! Answer is {}\n", answer);
             } else {
