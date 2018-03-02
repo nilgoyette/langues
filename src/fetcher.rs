@@ -69,7 +69,11 @@ fn already_downloaded(verb: &str, language: &str) -> Option<Tense> {
         let mut serialized = String::new();
         f.read_to_string(&mut serialized)
             .expect("something went wrong reading the file");
-        serde_json::from_str(&serialized).unwrap()
+        let tense = serde_json::from_str(&serialized);
+        if tense.is_err() {
+            panic!("{} is corrupted", get_json_path(language, verb));
+        }
+        tense.unwrap()
     } else {
         None
     }
