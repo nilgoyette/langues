@@ -27,7 +27,6 @@ rapidement :)
 
 ## À faire
 
-- Afficher les pronoms
 - Accepter les réponses avec ou sans pronom
 - Accepter les réponses avec ou sans accent
 - Flag --vos pour activer ou non vosotros, car ce pronom est utilisé seulement
