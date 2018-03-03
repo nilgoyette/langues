@@ -22,13 +22,14 @@ verbes.
 
 - Les verbes sont téléchargés à partir de `conjugueur.reverso.net`. Ils sont
 automatiquement sérialisés afin de ne pas abuser de ce serveur.
-- De simple questions/réponses sur 3 verbes hardcodés... Çeci va changer
-rapidement :)
+- De simple questions/réponses sur une liste de verbes de votre choix.
 
 ## À faire
 
+- Gérer les pronoms `j'`
 - Accepter les réponses avec ou sans pronom
 - Accepter les réponses avec ou sans accent
+- Gérer les verbes "doubles" ou "triples", ie. `être, ser, estar`
 - Flag --vos pour activer ou non vosotros, car ce pronom est utilisé seulement
 en Espagne. AFAIK, l'Amérique latine ne l'utilise pas.
 - Flag --percent X% pour choisir le % de chance de demander le sens de la
