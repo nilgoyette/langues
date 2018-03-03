@@ -33,7 +33,7 @@ impl Language {
         match *self {
             Language::French => {
                 match conjugation {
-                    Conjugation::Root => "",
+                    Conjugation::Root => "::",
                     Conjugation::FirstSingular => "je",
                     Conjugation::SecondSingular => "tu",
                     Conjugation::ThirdSingular => "il",
@@ -44,7 +44,7 @@ impl Language {
             }
             Language::Spanish => {
                 match conjugation {
-                    Conjugation::Root => "",
+                    Conjugation::Root => "::",
                     Conjugation::FirstSingular => "yo",
                     Conjugation::SecondSingular => "tú",
                     Conjugation::ThirdSingular => "él",
