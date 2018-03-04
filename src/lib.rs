@@ -13,7 +13,7 @@ mod question;
 mod tense;
 
 use conjugation::Conjugation;
-pub use fetcher::get_verb;
+pub use fetcher::{get_base_path, get_verb};
 pub use language::Language;
 pub use question::Questions;
 use tense::Tense;

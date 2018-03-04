@@ -2,7 +2,7 @@
 use std::fs;
 use std::fs::File;
 use std::io::{Read, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use app_dirs::{AppDataType, AppInfo, get_app_root};
 use reqwest;
@@ -74,8 +74,12 @@ fn already_downloaded(verb: &str, language: &str) -> Option<Tense> {
     }
 }
 
+pub fn get_base_path() -> PathBuf {
+    get_app_root(AppDataType::SharedData, &APP_INFO).unwrap()
+}
+
 fn get_json_path(language: &str, verb: &str) -> String {
-    let mut path = get_app_root(AppDataType::SharedData, &APP_INFO).unwrap();
+    let mut path = get_base_path();
     path.push(language);
     if !path.exists() {
         fs::create_dir_all(&path).unwrap();

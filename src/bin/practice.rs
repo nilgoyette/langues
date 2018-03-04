@@ -8,7 +8,7 @@ use std::fs::File;
 
 use docopt::Docopt;
 
-use espagnol::{Language, Questions, get_verb};
+use espagnol::{Language, Questions, get_base_path, get_verb};
 
 static USAGE: &'static str = "
 Pratiquer les verbes français-espagnol à partir des verbes contenus dans un
@@ -29,6 +29,10 @@ fn main() {
     let args = Docopt::new(USAGE)
                       .and_then(|dopt| dopt.version(Some(version)).parse())
                       .unwrap_or_else(|e| e.exit());
+
+    println!(
+      "Saving/reading verb in {}\n",
+      get_base_path().into_os_string().into_string().unwrap());
 
     let mut all_verbs = vec![];
     let reader = BufReader::new(File::open(args.get_str("<verbs>")).unwrap());
