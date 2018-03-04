@@ -43,9 +43,8 @@ impl Questions {
             } else {
                 (spanish, french)
             };
-            let pronoun = from.get_pronoun(conjugation);
             let question = from.get(conjugation);
-            println!("{} {}", pronoun, question);
+            println!("{}", question);
 
             user_answer.clear();
             stdout().flush().unwrap();

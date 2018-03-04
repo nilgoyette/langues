@@ -43,7 +43,9 @@ pub fn get_verb(verb: &str, language: Language) -> Tense {
             for chunk in words.chunks(pronoun_length + 1) {
                 let pronoun = chunk[0..pronoun_length].join("");
                 let verb = chunk.last().unwrap().clone();
-                tense.set(Conjugation::from_string(pronoun.trim_right()), &verb);
+                tense.set(
+                    Conjugation::from_string(pronoun.trim_right()),
+                    &(pronoun + verb.trim()));
             }
 
             // Serialize it before returning. Lets disturb the verb source as less as possible
