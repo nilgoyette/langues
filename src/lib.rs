@@ -26,20 +26,20 @@ mod tests {
     fn test_access_and_conjugation() {
         let v = get_verb("manger", Language::French);
         assert_eq!(v.root, "manger".to_string());
-        assert_eq!(v.first_singular, "mange".to_string());
-        assert_eq!(v.second_singular, "manges".to_string());
-        assert_eq!(v.third_singular, "mange".to_string());
-        assert_eq!(v.first_plural, "mangeons".to_string());
-        assert_eq!(v.second_plural, "mangez".to_string());
-        assert_eq!(v.third_plural, "mangent".to_string());
+        assert_eq!(v.first_singular, "je mange".to_string());
+        assert_eq!(v.second_singular, "tu manges".to_string());
+        assert_eq!(v.third_singular, "il/elle mange".to_string());
+        assert_eq!(v.first_plural, "nous mangeons".to_string());
+        assert_eq!(v.second_plural, "vous mangez".to_string());
+        assert_eq!(v.third_plural, "ils/elles mangent".to_string());
 
         let v = get_verb("comer", Language::Spanish);
         assert_eq!(v.root, "comer".to_string());
-        assert_eq!(v.first_singular, "como".to_string());
-        assert_eq!(v.second_singular, "comes".to_string());
-        assert_eq!(v.third_singular, "come".to_string());
-        assert_eq!(v.first_plural, "comemos".to_string());
-        assert_eq!(v.second_plural, "coméis".to_string());
-        assert_eq!(v.third_plural, "comen".to_string());
+        assert_eq!(v.first_singular, "(yo) como".to_string());
+        assert_eq!(v.second_singular, "(tú) comes".to_string());
+        assert_eq!(v.third_singular, "(él/ella/Ud.) come".to_string());
+        assert_eq!(v.first_plural, "(nosotros) comemos".to_string());
+        assert_eq!(v.second_plural, "(vosotros) coméis".to_string());
+        assert_eq!(v.third_plural, "(ellos/ellas/Uds.) comen".to_string());
     }
 }
