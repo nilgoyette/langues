@@ -55,14 +55,15 @@ impl Questions {
 
             match answers.iter().find(|&s| s == &user_answer) {
                 Some(_) => println!(""),
-                None => println!("Wrong! Could have been   {}", answers[0])
+                None => println!("Wrong! Could have been   {}\n", answers[0])
             }
         }
     }
 }
 
 fn possibilities(answer: &str) -> Vec<String> {
-    if !answer.contains("/") && !answer.contains("(") {
+    let is_facultative = answer.contains("(");
+    if !answer.contains("/") && !is_facultative {
         return vec![answer.to_string()];
     }
 
@@ -71,6 +72,9 @@ fn possibilities(answer: &str) -> Vec<String> {
     let verb = parts.next().unwrap();
 
     let mut possibilities = vec![];
+    if is_facultative {
+        possibilities.push(verb.to_string());
+    }
     for pronoun in pronouns.split('/') {
         possibilities.push(pronoun.to_string() + " " + verb);
     }
