@@ -27,10 +27,6 @@ impl Tense {
         }
     }
 
-    pub fn get_pronoun(&self, conjugation: Conjugation) -> &str {
-        self.language.get_pronoun(conjugation)
-    }
-
     pub fn get(&self, conjugation: Conjugation) -> &str {
         match conjugation {
             Conjugation::Root => &self.root,
