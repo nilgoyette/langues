@@ -46,17 +46,34 @@ impl Questions {
             let question = from.get(conjugation);
             println!("{}", question);
 
+            let answers = possibilities(to.get(conjugation));
+
             user_answer.clear();
             stdout().flush().unwrap();
             stdin().read_line(&mut user_answer).expect("Did not enter a correct string");
-            user_answer = user_answer.trim().to_string();
+            let user_answer = user_answer.trim().to_string();
 
-            let answer = to.get(conjugation);
-            if user_answer != answer {
-                println!("Wrong! Answer is {}\n", answer);
-            } else {
-                println!("");
+            match answers.iter().find(|&s| s == &user_answer) {
+                Some(_) => println!(""),
+                None => println!("Wrong! Could have been   {}", answers[0])
             }
         }
     }
+}
+
+fn possibilities(answer: &str) -> Vec<String> {
+    if !answer.contains("/") && !answer.contains("(") {
+        return vec![answer.to_string()];
+    }
+
+    let mut parts = answer.split(' ');
+    let pronouns = parts.next().unwrap();
+    let verb = parts.next().unwrap();
+
+    let mut possibilities = vec![];
+    for pronoun in pronouns.split('/') {
+        possibilities.push(pronoun.to_string() + " " + verb);
+    }
+
+    possibilities
 }
