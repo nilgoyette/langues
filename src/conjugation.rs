@@ -26,7 +26,7 @@ impl Conjugation {
     pub fn from_string(det: &str) -> Conjugation {
         match det {
             "" => Conjugation::Root,
-            "je" | "(yo)" => Conjugation::FirstSingular,
+            "j'" | "je" | "(yo)" => Conjugation::FirstSingular,
             "tu" | "(tú)" => Conjugation::SecondSingular,
             "il/elle" | "(él/ella/Ud.)" => Conjugation::ThirdSingular,
             "nous" | "(nosotros)" => Conjugation::FirstPlural,
