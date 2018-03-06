@@ -22,7 +22,6 @@ impl Conjugation {
             Conjugation::ThirdPlural]
     }
 
-    // TODO Prendre en charge les verbes impersonels. ex. pleuvoir, falloir, etc.
     pub fn from_string(det: &str) -> Conjugation {
         match det {
             "" => Conjugation::Root,
