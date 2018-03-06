@@ -26,8 +26,6 @@ automatiquement sérialisés afin de ne pas abuser de ce serveur.
 
 ## À faire
 
-- Gérer les pronoms `j'`
-- Accepter les réponses avec ou sans pronom
 - Accepter les réponses avec ou sans accent
 - Gérer les verbes "doubles" ou "triples", ie. `être, ser, estar`
 - Flag --vos pour activer ou non vosotros, car ce pronom est utilisé seulement
