@@ -73,11 +73,18 @@ fn possibilities(answer: &str) -> Vec<String> {
 
     let mut possibilities = vec![];
     if is_facultative {
+        // Remove the parenthesis
         pronouns = &pronouns[1..pronouns.len() - 1];
-        possibilities.push(verb.to_string());
+
+        for verb in verb.split('/') {
+            possibilities.push(verb.to_string());
+        }
     }
+
     for pronoun in pronouns.split('/') {
-        possibilities.push(pronoun.to_string() + " " + verb);
+        for verb in verb.split('/') {
+            possibilities.push(pronoun.to_string() + " " + verb);
+        }
     }
 
     possibilities
@@ -92,6 +99,11 @@ mod tests {
         assert_eq!(possibilities("tu manges"), vec!["tu manges"]);
         assert_eq!(possibilities("il/elle mange"), vec!["il mange", "elle mange"]);
         assert_eq!(possibilities("ils/elles mangent"), vec!["ils mangent", "elles mangent"]);
+
+        assert_eq!(possibilities("je paye/paie"), vec!["je paye", "je paie"]);
+        assert_eq!(
+            possibilities("ils/elles payent/paient"),
+            vec!["ils payent", "ils paient", "elles payent", "elles paient"]);
 
         assert_eq!(possibilities("(tú) comes"), vec!["comes", "tú comes"]);
         assert_eq!(
