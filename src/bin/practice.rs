@@ -12,7 +12,9 @@ use espagnol::{Language, Questions, get_base_path, get_verb};
 
 static USAGE: &'static str = "
 Pratiquer les verbes français-espagnol à partir des verbes contenus dans un
-fichier texte. Un verbe par ligne, ie. \"manger, comer\"
+fichier texte. Un verbe par ligne, ie. \"manger, comer\" Une ligne commençant
+par '#' sera ignorée. La lecture du fichier s'arrête dès qu'une ligne commence
+par '-'.
 
 Usage:
   practice <verbs> [options]
@@ -38,6 +40,7 @@ fn main() {
     let reader = BufReader::new(File::open(args.get_str("<verbs>")).unwrap());
     for line in reader.lines() {
         let mut line = line.unwrap();
+        if line.starts_with("#") { continue; }
         if line.starts_with("-") { break; }
 
         let mut parts = line.split_terminator(", ");
