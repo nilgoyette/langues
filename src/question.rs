@@ -13,9 +13,20 @@ pub struct Questions {
 }
 
 impl Questions {
-    pub fn new(verbs: Vec<(Tense, Tense)>, nb: usize) -> Questions {
+    pub fn new(
+        verbs: Vec<(Tense, Tense)>,
+        nb: usize,
+        vosotros: bool
+    ) -> Questions {
         let mut rng = rand::weak_rng();
         let mut conjugations = Conjugation::all();
+
+        // Remove 'vous/vosotros' if the user didn't ask for it
+        if !vosotros {
+            let vosotros_position = conjugations.iter().position(
+                |&c| c == Conjugation::SecondPlural).unwrap();
+            conjugations.swap_remove(vosotros_position);
+        }
         
         let mut questions = Vec::with_capacity(verbs.len());
         for i in 0..verbs.len() {

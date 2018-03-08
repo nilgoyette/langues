@@ -22,6 +22,7 @@ Usage:
   practice (-v | --version)
 
 Options:
+  --vosotros    Enable the 'vosotros' pronoun. Disabled by default.
   -h --help     Show this screen.
   -v --version  Show version.
 ";
@@ -33,8 +34,8 @@ fn main() {
                       .unwrap_or_else(|e| e.exit());
 
     println!(
-      "Saving/reading verb in {}\n",
-      get_base_path().into_os_string().into_string().unwrap());
+        "Saving/reading verb in {}\n",
+        get_base_path().into_os_string().into_string().unwrap());
 
     let mut all_verbs = vec![];
     let reader = BufReader::new(File::open(args.get_str("<verbs>")).unwrap());
@@ -49,6 +50,7 @@ fn main() {
         all_verbs.push((french, spanish));
     }
 
-    let mut questions = Questions::new(all_verbs, 2);
+    let mut questions =
+        Questions::new(all_verbs, 2, args.get_bool("--vosotros"));
     questions.practice();
 }
