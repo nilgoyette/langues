@@ -23,14 +23,21 @@ verbes.
 - Les verbes sont téléchargés à partir de `conjugueur.reverso.net`. Ils sont
 automatiquement sérialisés afin de ne pas abuser de ce serveur.
 - De simple questions/réponses sur une liste de verbes de votre choix.
+- Flag --vos pour activer ou non vosotros, car ce pronom est utilisé seulement
+en Espagne. AFAIK, l'Amérique latine ne l'utilise pas.
 
 ## À faire
 
 - Accepter les réponses avec ou sans accent
+- Étant facultatifs, les pronoms espagnols pourraient avoir un % de chance
+d'être enlevés. Par contre, ce serait bien, un jour, de forcer un genre et de
+s'attendre à une réponse genrée, par exemple "él camina" -> "il marche".
 - Gérer les verbes "doubles" ou "triples", ie. `être, ser, estar`
-- Flag --vos pour activer ou non vosotros, car ce pronom est utilisé seulement
-en Espagne. AFAIK, l'Amérique latine ne l'utilise pas.
 - Flag --percent X% pour choisir le % de chance de demander le sens de la
 question (espagnol -> français, ou inverse)
 - Un concept d'apprentissage un peu plus évolué. Certains verbes sont "faciles"
 et devrait donc apparaître moins souvent.
+- Le pronom 'vous/vosotros' peut être enlevé des pratiques mais ce serait
+peut-être une meilleure idée d'accepter sa forme singulière (él/ella/usted) et
+pluriel (ellos/ellas/ustedes). Bref, gardez le 'vous' français et accepter
+davantage de choix espagnols.
