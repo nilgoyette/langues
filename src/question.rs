@@ -64,9 +64,10 @@ impl Questions {
             stdin().read_line(&mut user_answer).expect("Did not enter a correct string");
             let user_answer = user_answer.trim().to_string();
 
-            match answers.iter().find(|&s| s == &user_answer) {
-                Some(_) => println!(""),
-                None => println!("Wrong! Could have been   {}\n", answers[0])
+            if good_answer(user_answer, &answers) {
+                println!("");
+            } else {
+                println!("Wrong! Could have been   {}\n", answers[0]);
             }
         }
     }
@@ -99,6 +100,33 @@ fn possibilities(answer: &str) -> Vec<String> {
     }
 
     possibilities
+}
+
+/// Spanish has 5 accentuated letters: á, é, í, ó, ú and ñ. They are all really hard to type on a
+/// french keyboard (except 'é'), so we want to accept the user answer if he "forgot" the accents.
+fn good_answer(user_answer: String, answers: &Vec<String>) -> bool {
+    answers.into_iter().any(|answer| compare_one(&user_answer, answer))
+}
+
+fn compare_one(user_answer: &str, answer: &str) -> bool {
+    // Never use `.len()` to get the number of characters
+    if answer.chars().count() != user_answer.chars().count() {
+        false
+    } else {
+        for (c1, c2) in answer.chars().zip(user_answer.chars()) {
+            let matched = match c1 {
+                'á' => c2 == 'a' || c2 == 'á',
+                'é' => c2 == 'e' || c2 == 'é',
+                'í' => c2 == 'i' || c2 == 'í',
+                'ó' => c2 == 'o' || c2 == 'ó',
+                'ú' => c2 == 'u' || c2 == 'ú',
+                'ñ' => c2 == 'n' || c2 == 'ñ',
+                _ => c1 == c2
+            };
+            if !matched { return false; }
+        }
+        true
+    }
 }
 
 #[cfg(test)]
