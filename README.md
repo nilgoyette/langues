@@ -28,7 +28,6 @@ en Espagne. AFAIK, l'Amérique latine ne l'utilise pas.
 
 ## À faire
 
-- Accepter les réponses avec ou sans accent
 - Étant facultatifs, les pronoms espagnols pourraient avoir un % de chance
 d'être enlevés. Par contre, ce serait bien, un jour, de forcer un genre et de
 s'attendre à une réponse genrée, par exemple "él camina" -> "il marche".
