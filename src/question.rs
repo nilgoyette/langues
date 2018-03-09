@@ -152,4 +152,20 @@ mod tests {
             possibilities("(ellos/ellas/Uds.) comen"),
             vec!["comen", "ellos comen", "ellas comen", "Uds. comen"]);
     }
+
+    #[test]
+    fn test_compare() {
+        assert!(good_answer(
+            "comer".to_string(),
+            &vec!["comer".to_string()]));
+        assert!(good_answer(
+            "comer".to_string(),
+            &vec!["fsdfr".to_string(), "comer".to_string()]));
+        assert!(!good_answer(
+            "comér".to_string(),
+            &vec!["fsdfr".to_string(), "comer".to_string()]));
+
+        assert!(compare_one("sueño", "sueño"));
+        assert!(compare_one("sueno", "sueño"));
+    }
 }
