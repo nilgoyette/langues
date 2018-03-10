@@ -39,8 +39,8 @@ en Espagne. AFAIK, l'Amérique latine ne l'utilise pas.
 d'être enlevés. Par contre, ce serait bien, un jour, de forcer un genre et de
 s'attendre à une réponse genrée, par exemple "él camina" -> "il marche".
 - Gérer les verbes "doubles" ou "triples", ie. `être, ser, estar`
-- Flag --percent X% pour choisir le % de chance de demander le sens de la
-question (espagnol -> français, ou inverse)
+- Flag --version X% pour choisir le % de chance de `thème` ou `version`.
+`version` étant une question espagnol -> français, et `thème` l'inverse.
 - Un concept d'apprentissage un peu plus évolué. Certains verbes sont "faciles"
 et devrait donc apparaître moins souvent.
 - Le pronom 'vous/vosotros' peut être enlevé des pratiques mais ce serait
