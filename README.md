@@ -18,6 +18,13 @@ Je viens tout juste de commencer ce projet alors presque tout est à faire! Cela
 dit, je me concentre sur l'espagnol pour le moment, en particulier sur les
 verbes.
 
+## Installation
+
+[Linux](https://github.com/sfackler/rust-openssl#linux) et
+[OSX](https://github.com/sfackler/rust-openssl#osx) doivent installer OpenSSL.
+Windows n'a rien de particulier à installer. Ensuite, un simple
+`cargo run --release verbes.txt` et le tour est joué.
+
 ## Ce qui fonctionne bien ou presque
 
 - Les verbes sont téléchargés à partir de `conjugueur.reverso.net`. Ils sont
