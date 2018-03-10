@@ -6,10 +6,12 @@ use rand::Rng;
 
 use {Conjugation, Tense};
 
+type Verb = (Tense, Tense);
+
 #[derive(Debug)]
 pub struct Questions {
-    verbs: Vec<(Tense, Tense)>,
-    questions: Vec<(usize, Conjugation)>
+    nb_conjugations: usize,
+    questions: Vec<(Verb, Vec<Conjugation>)>
 }
 
 impl Questions {
@@ -21,22 +23,22 @@ impl Questions {
         let mut rng = rand::weak_rng();
         let mut conjugations = Conjugation::all();
 
+        let nb_conjugations = if vosotros { 7 } else { 6 };
+
         // Remove 'vous/vosotros' if the user didn't ask for it
         if !vosotros {
             let vosotros_position = conjugations.iter().position(
                 |&c| c == Conjugation::SecondPlural).unwrap();
             conjugations.swap_remove(vosotros_position);
         }
-        
+
         let mut questions = Vec::with_capacity(verbs.len());
-        for i in 0..verbs.len() {
+        for verb in verbs {
             rng.shuffle(&mut conjugations);
-            for conjugation in &conjugations[0..nb] {
-                questions.push((i, *conjugation));
-            }
+            questions.push((verb, conjugations[0..nb].iter().cloned().collect()));
         }
 
-        Questions { verbs, questions }
+        Questions { nb_conjugations, questions }
     }
 
     pub fn practice(&mut self) {
@@ -45,19 +47,24 @@ impl Questions {
         while !self.questions.is_empty() {
             rng.shuffle(&mut self.questions);
 
-            let (idx, conjugation) = self.questions.pop().unwrap();
-            let &(ref french, ref spanish) = &self.verbs[idx];
+            let (verb, mut conjugations) = self.questions.pop().unwrap();
+            let conjugation = conjugations.pop().unwrap();
 
             // Choose side
-            let (from, to) = if rng.gen() {
-                (french, spanish)
-            } else {
-                (spanish, french)
+            let (question, answers) = {
+                let (from, to) = if rng.gen() {
+                    (&verb.0, &verb.1)
+                } else {
+                    (&verb.1, &verb.0)
+                };
+                (from.get(conjugation).to_string(), possibilities(to.get(conjugation)))
             };
-            let question = from.get(conjugation);
             println!("{}", question);
 
-            let answers = possibilities(to.get(conjugation));
+            // Put the verb back in the list if there's still more conjugatiosn to learn
+            if conjugations.len() > 0 {
+                self.questions.push((verb, conjugations));
+            }
 
             user_answer.clear();
             stdout().flush().unwrap();
