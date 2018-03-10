@@ -42,41 +42,46 @@ impl Questions {
     }
 
     pub fn practice(&mut self) {
-        let mut rng = rand::weak_rng();
         let mut user_answer = String::new();
         while !self.questions.is_empty() {
-            rng.shuffle(&mut self.questions);
-
-            let (verb, mut conjugations) = self.questions.pop().unwrap();
-            let conjugation = conjugations.pop().unwrap();
-
-            // Choose side
-            let (question, answers) = {
-                let (from, to) = if rng.gen() {
-                    (&verb.0, &verb.1)
-                } else {
-                    (&verb.1, &verb.0)
-                };
-                (from.get(conjugation).to_string(), possibilities(to.get(conjugation)))
-            };
+            let (question, answers) = self.get_one();
             println!("{}", question);
-
-            // Put the verb back in the list if there's still more conjugatiosn to learn
-            if conjugations.len() > 0 {
-                self.questions.push((verb, conjugations));
-            }
 
             user_answer.clear();
             stdout().flush().unwrap();
             stdin().read_line(&mut user_answer).expect("Did not enter a correct string");
-            let user_answer = user_answer.trim().to_string();
 
-            if good_answer(user_answer, &answers) {
+            if good_answer(user_answer.trim().to_string(), &answers) {
                 println!("");
             } else {
                 println!("Wrong! Could have been   {}\n", answers[0]);
             }
         }
+    }
+
+    fn get_one(&mut self) -> (String, Vec<String>) {
+        let mut rng = rand::weak_rng();
+        rng.shuffle(&mut self.questions);
+
+        let (verb, mut conjugations) = self.questions.pop().unwrap();
+        let conjugation = conjugations.pop().unwrap();
+
+        // Choose side
+        let (question, answers) = {
+            let (from, to) = if rng.gen() {
+                (&verb.0, &verb.1)
+            } else {
+                (&verb.1, &verb.0)
+            };
+            (from.get(conjugation).to_string(), possibilities(to.get(conjugation)))
+        };
+
+        // Put the verb back in the list if there's still more conjugatiosn to learn
+        if conjugations.len() > 0 {
+            self.questions.push((verb, conjugations));
+        }
+
+        (question, answers)
     }
 }
 
