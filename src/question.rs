@@ -21,24 +21,17 @@ impl Questions {
         vosotros: bool
     ) -> Questions {
         let mut rng = rand::weak_rng();
-        let mut conjugations = Conjugation::all();
-
-        let nb_conjugations = if vosotros { 7 } else { 6 };
-
-        // Remove 'vous/vosotros' if the user didn't ask for it
-        if !vosotros {
-            let vosotros_position = conjugations.iter().position(
-                |&c| c == Conjugation::SecondPlural).unwrap();
-            conjugations.swap_remove(vosotros_position);
-        }
-
+        let mut conjugations = get_conjugations(vosotros);
         let mut questions = Vec::with_capacity(verbs.len());
         for verb in verbs {
             rng.shuffle(&mut conjugations);
             questions.push((verb, conjugations[0..nb].iter().cloned().collect()));
         }
 
-        Questions { nb_conjugations, questions }
+        Questions {
+            nb_conjugations: if vosotros { 7 } else { 6 },
+            questions
+        }
     }
 
     pub fn practice(&mut self) {
@@ -85,6 +78,19 @@ impl Questions {
     }
 }
 
+fn get_conjugations(vosotros: bool) -> Vec<Conjugation> {
+    let mut conjugations = Conjugation::all();
+
+    // Remove 'vous/vosotros' if the user didn't ask for it
+    if !vosotros {
+        let vosotros_position = conjugations.iter().position(
+            |&c| c == Conjugation::SecondPlural).unwrap();
+        conjugations.swap_remove(vosotros_position);
+    }
+
+    conjugations
+}
+
 fn possibilities(answer: &str) -> Vec<String> {
     let is_facultative = answer.contains("(");
     if !answer.contains("/") && !is_facultative {
@@ -114,7 +120,7 @@ fn possibilities(answer: &str) -> Vec<String> {
     possibilities
 }
 
-/// Spanish has 5 accentuated letters: á, é, í, ó, ú and ñ. They are all really hard to type on a
+/// Spanish has 6 accentuated letters: á, é, í, ó, ú and ñ. They are all really hard to type on a
 /// french keyboard (except 'é'), so we want to accept the user answer if he "forgot" the accents.
 fn good_answer(user_answer: String, answers: &Vec<String>) -> bool {
     answers.into_iter().any(|answer| compare_one(&user_answer, answer))
