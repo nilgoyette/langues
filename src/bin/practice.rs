@@ -22,9 +22,11 @@ Usage:
   practice (-v | --version)
 
 Options:
-  --vosotros    Enable the 'vosotros' pronoun. Disabled by default.
-  -h --help     Show this screen.
-  -v --version  Show version.
+  --vosotros          Ajoute le pronom 'vosotros'. Absent par défaut.
+  --nb_on_error=<n>   Nombre de conjugaisons à ajouter à votre pratique en cas de mauvaise
+                      réponse. [default: 2]
+  -h --help           Affiche cet écran.
+  -v --version        Affiche la version.
 ";
 
 fn main() {
@@ -50,7 +52,9 @@ fn main() {
         all_verbs.push((french, spanish));
     }
 
-    let mut questions =
-        Questions::new(all_verbs, 2, args.get_bool("--vosotros"));
+    let vosotros = args.get_bool("--vosotros");
+    let nb_on_error = args.get_str("--nb_on_error").parse::<usize>().unwrap();
+
+    let mut questions = Questions::new(all_verbs, 2, vosotros, nb_on_error);
     questions.practice();
 }

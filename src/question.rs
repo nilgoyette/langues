@@ -11,14 +11,16 @@ type Verb = (Tense, Tense);
 pub struct Questions {
     nb_conjugations: usize,
     questions: Vec<(Verb, Vec<Conjugation>)>,
-    vosotros: bool
+    vosotros: bool,
+    nb_on_error: usize
 }
 
 impl Questions {
     pub fn new(
         verbs: Vec<(Tense, Tense)>,
         nb: usize,
-        vosotros: bool
+        vosotros: bool,
+        nb_on_error: usize
     ) -> Questions {
         let mut rng = rand::weak_rng();
         let mut conjugations = get_conjugations(vosotros);
@@ -30,8 +32,7 @@ impl Questions {
 
         Questions {
             nb_conjugations: if vosotros { 7 } else { 6 },
-            questions,
-            vosotros
+            questions, vosotros, nb_on_error
         }
     }
 
@@ -80,7 +81,7 @@ impl Questions {
 
     fn add_it_back_and_more(&mut self) {
         // A new scope because `self.questions` is already borrowed
-        let possible_conjugations = {
+        let mut possible_conjugations = {
             let mut possible_conjugations = get_conjugations(self.vosotros);
             let current_conjugations = &self.questions.last().unwrap().1;
             if current_conjugations.len() < self.nb_conjugations {
@@ -92,10 +93,15 @@ impl Questions {
             possible_conjugations
         };
 
-        // Now pick a random conjugation from the list
+        // Now pick a N random conjugations from the list
         let mut rng = rand::weak_rng();
-        self.questions.last_mut().unwrap().1.push(
-            *rng.choose(&possible_conjugations).unwrap());
+        for _ in 0..self.nb_on_error {
+            let new_conjugation = *rng.choose(&possible_conjugations).unwrap();
+            let i = possible_conjugations.iter().position(|&pc| pc == new_conjugation).unwrap();
+            possible_conjugations.swap_remove(i);
+
+            self.questions.last_mut().unwrap().1.push(new_conjugation);
+        }
     }
 }
 
