@@ -1,8 +1,7 @@
 
 use std::io::{stdin, stdout, Write};
 
-use rand;
-use rand::Rng;
+use rand::{self, Rng};
 
 use {Conjugation, Tense};
 
@@ -11,7 +10,8 @@ type Verb = (Tense, Tense);
 #[derive(Debug)]
 pub struct Questions {
     nb_conjugations: usize,
-    questions: Vec<(Verb, Vec<Conjugation>)>
+    questions: Vec<(Verb, Vec<Conjugation>)>,
+    vosotros: bool
 }
 
 impl Questions {
@@ -30,7 +30,8 @@ impl Questions {
 
         Questions {
             nb_conjugations: if vosotros { 7 } else { 6 },
-            questions
+            questions,
+            vosotros
         }
     }
 
@@ -46,8 +47,13 @@ impl Questions {
 
             if good_answer(user_answer.trim().to_string(), &answers) {
                 println!("");
+                // Remove the verb from the list if there's no more conjugation to practice
+                if self.questions.last().unwrap().1.is_empty() {
+                    self.questions.pop().unwrap();
+                }
             } else {
                 println!("Wrong! Could have been   {}\n", answers[0]);
+                self.add_it_back_and_more();
             }
         }
     }
@@ -56,7 +62,7 @@ impl Questions {
         let mut rng = rand::weak_rng();
         rng.shuffle(&mut self.questions);
 
-        let (verb, mut conjugations) = self.questions.pop().unwrap();
+        let &mut (ref verb, ref mut conjugations) = self.questions.last_mut().unwrap();
         let conjugation = conjugations.pop().unwrap();
 
         // Choose side
@@ -69,12 +75,27 @@ impl Questions {
             (from.get(conjugation).to_string(), possibilities(to.get(conjugation)))
         };
 
-        // Put the verb back in the list if there's still more conjugatiosn to learn
-        if conjugations.len() > 0 {
-            self.questions.push((verb, conjugations));
-        }
-
         (question, answers)
+    }
+
+    fn add_it_back_and_more(&mut self) {
+        // A new scope because `self.questions` is already borrowed
+        let possible_conjugations = {
+            let mut possible_conjugations = get_conjugations(self.vosotros);
+            let current_conjugations = &self.questions.last().unwrap().1;
+            if current_conjugations.len() < self.nb_conjugations {
+                for cc in current_conjugations {
+                    let i = possible_conjugations.iter().position(|&pc| pc == *cc).unwrap();
+                    possible_conjugations.swap_remove(i);
+                }
+            }
+            possible_conjugations
+        };
+
+        // Now pick a random conjugation from the list
+        let mut rng = rand::weak_rng();
+        self.questions.last_mut().unwrap().1.push(
+            *rng.choose(&possible_conjugations).unwrap());
     }
 }
 
