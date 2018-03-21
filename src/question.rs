@@ -161,6 +161,7 @@ fn compare_one(user_answer: &str, answer: &str) -> bool {
         for (c1, c2) in answer.chars().zip(user_answer.chars()) {
             let matched = match c1 {
                 'á' => c2 == 'a' || c2 == 'á',
+                'ç' => c2 == 'c' || c2 == 'ç', // Only in french
                 'é' => c2 == 'e' || c2 == 'é',
                 'í' => c2 == 'i' || c2 == 'í',
                 'î' => c2 == 'i' || c2 == 'î', // Only in french
@@ -206,6 +207,7 @@ mod tests {
         assert!(!good_answer("comér", &vec!["fsdfr".into(), "comer".into()]));
         assert!(good_answer("connaitre", &vec!["connaître".into()]));
         assert!(!good_answer("connaître", &vec!["connaitre".into()]));
+        assert!(good_answer("lancons", &vec!["lançons".into()]));
 
         assert!(compare_one("sueño", "sueño"));
         assert!(compare_one("sueno", "sueño"));
