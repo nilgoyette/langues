@@ -167,6 +167,7 @@ fn compare_one(user_answer: &str, answer: &str) -> bool {
                 'î' => c2 == 'i' || c2 == 'î', // Only in french
                 'ó' => c2 == 'o' || c2 == 'ó',
                 'ú' => c2 == 'u' || c2 == 'ú',
+                'û' => c2 == 'u' || c2 == 'û', // Only in french
                 'ñ' => c2 == 'n' || c2 == 'ñ',
                 _ => c1 == c2
             };
@@ -208,6 +209,7 @@ mod tests {
         assert!(good_answer("connaitre", &vec!["connaître".into()]));
         assert!(!good_answer("connaître", &vec!["connaitre".into()]));
         assert!(good_answer("lancons", &vec!["lançons".into()]));
+        assert!(good_answer("goute", &vec!["goûte".into()]));
 
         assert!(compare_one("sueño", "sueño"));
         assert!(compare_one("sueno", "sueño"));
