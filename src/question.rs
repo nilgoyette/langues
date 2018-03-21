@@ -46,7 +46,7 @@ impl Questions {
             stdout().flush().unwrap();
             stdin().read_line(&mut user_answer).expect("Did not enter a correct string");
 
-            if good_answer(user_answer.trim().to_string(), &answers) {
+            if good_answer(user_answer.trim(), &answers) {
                 println!("");
                 // Remove the verb from the list if there's no more conjugation to practice
                 if self.questions.last().unwrap().1.is_empty() {
@@ -149,8 +149,8 @@ fn possibilities(answer: &str) -> Vec<String> {
 
 /// Spanish has 6 accentuated letters: á, é, í, ó, ú and ñ. They are all really hard to type on a
 /// french keyboard (except 'é'), so we want to accept the user answer if he "forgot" the accents.
-fn good_answer(user_answer: String, answers: &Vec<String>) -> bool {
-    answers.into_iter().any(|answer| compare_one(&user_answer, answer))
+fn good_answer(user_answer: &str, answers: &Vec<String>) -> bool {
+    answers.into_iter().any(|answer| compare_one(user_answer, answer))
 }
 
 fn compare_one(user_answer: &str, answer: &str) -> bool {
@@ -200,15 +200,11 @@ mod tests {
 
     #[test]
     fn test_compare() {
-        assert!(good_answer(
-            "comer".to_string(),
-            &vec!["comer".to_string()]));
-        assert!(good_answer(
-            "comer".to_string(),
-            &vec!["fsdfr".to_string(), "comer".to_string()]));
-        assert!(!good_answer(
-            "comér".to_string(),
-            &vec!["fsdfr".to_string(), "comer".to_string()]));
+        assert!(good_answer("comer", &vec!["comer".to_string()]));
+        assert!(good_answer("comer", &vec!["fsdfr".to_string(),
+                                           "comer".to_string()]));
+        assert!(!good_answer("comér", &vec!["fsdfr".to_string(),
+                                            "comer".to_string()]));
 
         assert!(compare_one("sueño", "sueño"));
         assert!(compare_one("sueno", "sueño"));
