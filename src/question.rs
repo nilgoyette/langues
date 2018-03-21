@@ -163,6 +163,7 @@ fn compare_one(user_answer: &str, answer: &str) -> bool {
                 'á' => c2 == 'a' || c2 == 'á',
                 'é' => c2 == 'e' || c2 == 'é',
                 'í' => c2 == 'i' || c2 == 'í',
+                'î' => c2 == 'i' || c2 == 'î', // Only in french
                 'ó' => c2 == 'o' || c2 == 'ó',
                 'ú' => c2 == 'u' || c2 == 'ú',
                 'ñ' => c2 == 'n' || c2 == 'ñ',
@@ -200,11 +201,11 @@ mod tests {
 
     #[test]
     fn test_compare() {
-        assert!(good_answer("comer", &vec!["comer".to_string()]));
-        assert!(good_answer("comer", &vec!["fsdfr".to_string(),
-                                           "comer".to_string()]));
-        assert!(!good_answer("comér", &vec!["fsdfr".to_string(),
-                                            "comer".to_string()]));
+        assert!(good_answer("comer", &vec!["comer".into()]));
+        assert!(good_answer("comer", &vec!["fsdfr".into(), "comer".into()]));
+        assert!(!good_answer("comér", &vec!["fsdfr".into(), "comer".into()]));
+        assert!(good_answer("connaitre", &vec!["connaître".into()]));
+        assert!(!good_answer("connaître", &vec!["connaitre".into()]));
 
         assert!(compare_one("sueño", "sueño"));
         assert!(compare_one("sueno", "sueño"));
